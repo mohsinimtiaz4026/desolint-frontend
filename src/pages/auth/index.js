@@ -3,14 +3,23 @@ import Image from "next/image";
 import Logo from "../../assets/logo.png";
 // formik
 import { Formik } from "formik";
+// axios
+import axios from "axios";
+// router
+import { useRouter } from "next/router";
+// react-hot-toast
+import toast, { Toaster } from 'react-hot-toast';
+
 
 const LoginScreen = () => {
+    const router = useRouter();
     return (
         <section>
+            <Toaster />
             <div className="container">
                 <div className="align-items-center row">
                     <div className="px-lg-4 col-lg-6 order-lg-1 order-2">
-                        <div className="card mt-5 mb-5">
+                        <div className="card mt-4 mb-4">
                             <div className="px-lg-5 card-header">
                                 <div className="card-heading text-danger">DESOL INT.</div>
                             </div>
@@ -29,11 +38,19 @@ const LoginScreen = () => {
                                         }
                                         return errors;
                                     }}
-                                    onSubmit={(values, { setSubmitting }) => {
+                                    onSubmit={async (values, { setSubmitting }) => {
                                         setTimeout(() => {
-                                            alert(JSON.stringify(values, null, 2));
                                             setSubmitting(false);
                                         }, 400);
+                                        const data = await axios.post("http://localhost:8000/api/task/login", values);
+                                        if (data.status === 200) {
+                                            console.log(data);
+                                            localStorage.setItem('user', JSON.stringify(data.data.data));
+                                            toast.success("User Authenicated");
+                                            router.push('/dashboard');
+                                        } else {
+                                            toast.error("Wrong Credentials!!!");
+                                        }
                                     }}>
                                     {({
                                         values,

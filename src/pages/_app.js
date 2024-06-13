@@ -5,12 +5,12 @@ import { useEffect } from 'react';
 
 export default function App({ Component, pageProps }) {
   const router = useRouter();
-  // useEffect(() => {
-  //   if (!localStorage.getItem("user")) {
-  //     router.push('/auth');
-  //   } else {
-  //     router.push('/dashboard');
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (!localStorage.getItem("user")) {
+      router.push('/auth');
+    } else {
+      router.push('/dashboard');
+    }
+  }, []);
   return <Component {...pageProps} />
 }
